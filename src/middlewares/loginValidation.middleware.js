@@ -41,36 +41,3 @@ export async function signInBodyValidation(req, res, next) {
 
   next();
 }
-
-export async function authRoutesValidation(req, res, next) {
-  const { authorization } = req.headers;
-  const token = authorization?.replace("Bearer ", "");
-
-  if (!token) {
-    return res.sendStatus(401);
-  }
-
-  try {
-
-    const session = await connection.query(
-      "SELECT * FROM sessions WHERE token=$1;",
-      [token]
-    );
-
-    if (session.rows.length !== 0) {
-      return res.sendStatus(401);
-    }
-
-    const user = await connection.query(
-      "SELECT * FROM users WHERE id=$1;",
-      [session.rows[0]._id]
-    );
-
-    res.locals.user = user;
-  } catch (err) {
-    console.log(err);
-    res.sendStatus(500);
-  }
-
-  next();
-}

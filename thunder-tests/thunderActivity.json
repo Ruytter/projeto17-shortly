@@ -1,0 +1,25 @@
+[
+  {
+    "_id": "31a5a773-449a-4b6c-a334-cd187a85ecac",
+    "colId": "history",
+    "containerId": "",
+    "name": "http://localhost:5000/urls/shorten",
+    "url": "http://localhost:5000/urls/2",
+    "method": "DELETE",
+    "sortNum": 0,
+    "created": "2022-12-20T14:14:01.704Z",
+    "modified": "2022-12-20T18:16:46.685Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n    \"url\": \"https://nscommunity.netsupport.com.br/t/ranking-dos-100-maiores-sites-do-mundo/564\"\n}",
+      "form": []
+    },
+    "auth": {
+      "type": "bearer",
+      "bearer": "4132791c-e68e-4431-a71f-12e2871e907c"
+    },
+    "tests": []
+  }
+]
