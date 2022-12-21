@@ -21,7 +21,8 @@ export async function urlValidation(req, res, next) {
   const shortenedUrls = {
     userId: session.rows[0].userId,
     shortUrl: nanoid(8),
-    url
+    url,
+    visitCount: 0
   }
 
   res.locals.shortenedUrls = shortenedUrls;

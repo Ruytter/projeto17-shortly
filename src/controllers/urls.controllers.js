@@ -1,13 +1,13 @@
 import  connection  from "../database/db.js";
 
 export async function urlShorter(req, res) {
-  const { userId, shortUrl, url } = res.locals.shortenedUrls;
+  const { userId, shortUrl, url, visitCount } = res.locals.shortenedUrls;
 
    try {
 
     await connection.query(
-      'INSERT INTO "shortenedUrls" ("userId", "shortUrl", url) VALUES ($1, $2, $3)',
-      [userId, shortUrl, url]
+      'INSERT INTO "shortenedUrls" ("userId", "shortUrl", url, "visitCount") VALUES ($1, $2, $3, $4)',
+      [userId, shortUrl, url, visitCount] 
     );
 
     res.sendStatus(201);
@@ -22,7 +22,6 @@ export async function getUrlById(req, res) {
       'SELECT id, "shortUrl", url FROM "shortenedUrls" WHERE id=$1',
       [id]
     );
-      console.log(rows[0])
     res.status(200).send(rows[0])
   } catch (err){
     res.status(404).send(err.message)
@@ -33,9 +32,19 @@ export async function getUrlById(req, res) {
     const { shortUrl } = req.params
   try {
     const { rows } = await connection.query (
-      'SELECT url FROM "shortenedUrls" WHERE "shortUrl"=$1',
+      'SELECT url, "visitCount" FROM "shortenedUrls" WHERE "shortUrl"=$1',
       [shortUrl]
     );
+
+    await connection.query (
+      'UPDate "shortenedUrls" SET "visitCount"=$1 WHERE "shortUrl"=$2',
+      [rows[0].visitCount + 1, shortUrl]
+    );
+
+
+      console.log  (rows[0].visitCount)
+    
+
     res.redirect(rows[0].url)
   } catch (err){
     res.status(404).send(err.message)
