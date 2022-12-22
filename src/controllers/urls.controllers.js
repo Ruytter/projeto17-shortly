@@ -38,13 +38,12 @@ export async function openUrl(req, res) {
       'SELECT url, "visitCount" FROM "shortenedUrls" WHERE "shortUrl"=$1',
       [shortUrl]
     );
-
     await connection.query(
       'UPDate "shortenedUrls" SET "visitCount"=$1 WHERE "shortUrl"=$2',
       [rows[0]?.visitCount + 1, shortUrl]
     );
 
-    res.redirect(rows[0].url);
+    res.status(200).redirect(rows[0].url);
   } catch (err) {
     res.status(404).send(err.message);
   }

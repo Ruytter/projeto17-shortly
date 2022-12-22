@@ -1,5 +1,5 @@
 import connection from "../database/db.js";
-import { userSchema } from "../models/users.model.js";
+import { userSchema, signinSchema } from "../models/users.model.js";
 import bcrypt from "bcrypt";
 
 export function userSchemaValidation(req, res, next) {
@@ -19,7 +19,16 @@ export function userSchemaValidation(req, res, next) {
 
 export async function signInBodyValidation(req, res, next) {
   const { email, password } = req.body;
-  if (email.length === 0 || password.length === 0) {
+  if (!req._body) {return res.sendStatus(422)}
+
+  const { error } = signinSchema.validate({email, password}, { abortEarly: false });
+
+  if (error) {
+    const errors = error.details.map((detail) => detail.message);
+    return res.status(422).send(errors);
+  }
+
+  if (email?.length === 0 || password?.length === 0) {
     return res.sendStatus(422);
   }
   try {
